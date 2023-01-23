@@ -36,6 +36,7 @@ module.exports = function (config) {
 				{ type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' }
 			]
 		},
+		headless: true,
 		port: 9669,
 		colors: true,
 		autoWatch: false,

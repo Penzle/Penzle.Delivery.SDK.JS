@@ -1,0 +1,22 @@
+{
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "name": "string",
+    "description": "string",
+    "createdAt": "2022-11-05T11:55:20.249Z",
+    "modifiedAt": "2022-11-05T11:55:20.249Z",
+    "type": "string",
+    "size": 0,
+    "url": "string",
+    "workflowId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "language": "string",
+    "assetMimeType": {
+      "type": ["string"],
+      "extension": "string"
+    },
+    "tags": [
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "string"
+      }
+    ]
+  }

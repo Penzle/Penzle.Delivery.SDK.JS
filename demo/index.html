@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Penzle.com SDK - UMD sample</title>
+	<script type="text/javascript" src="../dist/bundles/penzle-delivery.min.js"></script>
+</head>
+
+<body>
+
+	<script type="text/javascript">
+		var penzleDelivery = window['penzleDelivery'];
+
+		var deliveryClient = new penzleDelivery.createDeliveryClient({
+			baseAddress: 'https://www.penzle.com/api/',
+			accessApiToken: '5ab3464be2ccb9dabe9'
+		});
+
+		deliveryClient.entry
+			.getEntry('3fa85f64-5717-4562-b3fc-2c963f66afa6')
+			.then(response => console.log(response));
+
+	</script>
+
+	<h1>Please check console</h1>
+</body>
+
+</html>

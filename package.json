@@ -1,5 +1,5 @@
 {
-  "name": "@penzle/delivery-sdk",
+  "name": "@penzle/delivery-sdk", 
   "version": "0.0.1",
   "description": "Official Penzle.com Delivery API SDK",
   "main": "./dist/cjs/index.js",

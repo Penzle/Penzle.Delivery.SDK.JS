@@ -14,7 +14,7 @@ module.exports = function (config) {
 			'test/browser/**/*.ts': ['karma-typescript']
 		},
 		reporters: ['kjhtml', 'progress', 'karma-typescript'],
-		browsers: ['Chrome'],
+		browsers: ['ChromeHeadless'],
 		karmaTypescriptConfig: {
 			compilerOptions: {
 				emitDecoratorMetadata: true,

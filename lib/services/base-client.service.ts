@@ -17,7 +17,7 @@ export abstract class BaseClient {
 	}
 
 	get getBaseUrl(): string {
-		const addressTemplate = `{${this.getDomain}api/project/${this.config.project ?? 'main'}/environment/${
+		const addressTemplate = `${this.getDomain}api/project/${this.config.project ?? 'main'}/environment/${
 			this.config.environment ?? 'main'
 		}/`;
 		return addressTemplate;

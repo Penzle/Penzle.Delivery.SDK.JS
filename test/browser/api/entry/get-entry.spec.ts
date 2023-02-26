@@ -20,4 +20,23 @@ describe('Get entry', () => {
 		expect(response.fields.thumbnailLandscape).toEqual(responseJson.fields.thumbnailLandscape);
 		expect(response.fields.title).toEqual(responseJson.fields.title);
 	});
+
+	describe('getEntryUrl', () => {
+		it('should call the get getEntryUrl method with the correct url', async () => {
+			const id = 'my-id';
+
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id);
+
+			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/entries/my-id');
+		});
+
+		it('should call the getEntryUrl method with id and language with the correct url', async () => {
+			const id = 'my-id';
+			const language = 'en-US';
+
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id, language);
+
+			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US');
+		});
+	});
 });

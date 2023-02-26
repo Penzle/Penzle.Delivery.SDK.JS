@@ -14,5 +14,10 @@ export interface DeliveryConfig {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	httpService?: ApiService<any>;
 
+	/**
+	 * Default language of content entries.
+	 */
+	defaultLanguage?: string;
+
 	globalHeaders?: Header[];
 }

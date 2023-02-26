@@ -1,87 +1,63 @@
-import { QueryPaginationBuilder } from './query-pagination-builder';
+import { QueryParameter } from '@penzle/core-sdk';
+import { Page, QueryValue } from '../filters';
+import { PageSize } from '../filters/page-size';
+import { QueryNameValue } from '../filters/query-name-value';
 
 export class QueryAssetBuilder {
-	private ids = '';
-
-	private language = '';
-
-	private parentId = '';
-
-	private keyword = '';
-
-	private tag = '';
-
-	private mimeType = '';
-
-	private pagination: QueryPaginationBuilder = QueryPaginationBuilder.Default;
-
-	public static Instance = new QueryAssetBuilder();
+	parameters: QueryParameter[] = [];
 
 	withMimeType(mimeType: string): this {
-		this.mimeType = mimeType;
+		this.parameters.push(new QueryNameValue('mimeType', mimeType));
 		return this;
 	}
 
 	withIds(ids: string): this {
-		this.ids = ids;
+		this.parameters.push(new QueryNameValue('ids', ids));
 		return this;
 	}
 
 	withTag(tag: string): this {
-		this.tag = tag;
+		this.parameters.push(new QueryNameValue('tag', tag));
 		return this;
 	}
 
 	withKeyword(keyword: string): this {
-		this.keyword = keyword;
+		this.parameters.push(new QueryNameValue('keyword', keyword));
 		return this;
 	}
 
 	withParentId(parentId: string): this {
-		this.parentId = parentId;
+		this.parameters.push(new QueryNameValue('parentId', parentId));
 		return this;
 	}
 
-	fromRoot(rootId: string): this {
-		this.parentId = rootId;
+	fromRoot(parentId: string): this {
+		this.parameters.push(new QueryNameValue('parentId', parentId));
 		return this;
 	}
 
 	withLanguage(language: string): this {
-		this.language = language;
+		this.parameters.push(new QueryNameValue('language', language));
 		return this;
 	}
 
-	withPagination(pagination: QueryPaginationBuilder): this {
-		this.pagination = pagination || QueryPaginationBuilder.Default;
+	orderByDescending(fieldName: string): this {
+		this.parameters.push(new QueryValue(`orderBy=${fieldName}&direction=desc`));
 		return this;
 	}
 
-	get getIds(): string {
-		return this.ids;
+	orderByAscending(fieldName: string): this {
+		this.parameters.push(new QueryValue(`orderBy=${fieldName}&direction=asc`));
+		return this;
 	}
 
-	get getPagination(): QueryPaginationBuilder {
-		return this.pagination;
+	pageSize(size: number): this {
+		this.parameters.push(new PageSize(size));
+		return this;
 	}
 
-	get getLanguage(): string {
-		return this.language;
-	}
-
-	get getParentId(): string {
-		return this.parentId;
-	}
-
-	get getKeyword(): string {
-		return this.keyword;
-	}
-
-	get getTag(): string {
-		return this.tag;
-	}
-
-	get getMimeType(): string {
-		return this.mimeType;
+	page(page: number): this {
+		this.parameters.push(new Page(page));
+		return this;
 	}
 }

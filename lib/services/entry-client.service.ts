@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiService } from '@penzle/core-sdk';
-import { EntryApiUrls } from '../urls';
-import { DeliveryConfig, PagedList, QueryEntryBuilder } from '../models';
+import { DeliveryConfig, PagedList, QueryNameValue } from '../models';
 import { BaseClient } from './base-client.service';
 import { Entry } from '../models/entires/entry';
+import { QueryEntryBuilder } from '../models/builders/query-entry-builder';
 
 export class EntryClient extends BaseClient {
+	private readonly action = 'entries/';
+
 	constructor(config: DeliveryConfig, httpService: ApiService<any>) {
 		super(config, httpService);
 		if (!config || !httpService) {
@@ -24,35 +27,17 @@ export class EntryClient extends BaseClient {
 		template: string,
 		query?: QueryEntryBuilder
 	): Promise<PagedList<Entry<TEntry>>> {
-		const apiQuery = query || new QueryEntryBuilder();
+		const url = this.getEntriesUrl(template, query);
 
-		const response = await this.get<PagedList<Entry<TEntry>>>(
-			EntryApiUrls.getEntries(
-				template,
-				apiQuery.getPagination.getPage,
-				apiQuery.getPagination.getPageSize,
-				apiQuery.getParentId,
-				apiQuery.getLanguage,
-				apiQuery.getIds
-			)
-		);
+		const response = await this.get<PagedList<Entry<TEntry>>>(url);
 
 		return response.data;
 	}
 
 	async getPaginationList<TEntry>(template: string, query?: QueryEntryBuilder): Promise<PagedList<TEntry>> {
-		const apiQuery = query || new QueryEntryBuilder();
+		const url = this.getEntriesUrl(template, query);
 
-		const response = await this.get<PagedList<Entry<TEntry>>>(
-			EntryApiUrls.getEntries(
-				template,
-				apiQuery.getPagination.getPage,
-				apiQuery.getPagination.getPageSize,
-				apiQuery.getParentId,
-				apiQuery.getLanguage,
-				apiQuery.getIds
-			)
-		);
+		const response = await this.get<PagedList<Entry<TEntry>>>(url);
 
 		return {
 			items: response.data.items.map((entry): TEntry => entry.fields),
@@ -76,41 +61,36 @@ export class EntryClient extends BaseClient {
 	 * @returns {Promise<ReadonlyArray<TEntry>>} A read only collection of {@link TEntry} of items.
 	 */
 	async getEntries<TEntry>(template: string, query?: QueryEntryBuilder): Promise<TEntry[]> {
-		const apiQuery = query || new QueryEntryBuilder();
+		const url = this.getEntriesUrl(template, query);
 
-		const response = await this.get<PagedList<Entry<TEntry>>>(
-			EntryApiUrls.getEntries(
-				template,
-				apiQuery.getPagination.getPage,
-				apiQuery.getPagination.getPageSize,
-				apiQuery.getParentId,
-				apiQuery.getLanguage,
-				apiQuery.getIds
-			)
-		);
+		const response = await this.get<PagedList<Entry<TEntry>>>(url);
 
 		return response.data.items.map((entry): TEntry => entry.fields);
 	}
 
 	async getEntryList<TEntry>(template: string, query?: QueryEntryBuilder): Promise<Entry<TEntry>[]> {
-		const apiQuery = query || new QueryEntryBuilder();
+		const url = this.getEntriesUrl(template, query);
 
-		const response = await this.get<PagedList<Entry<TEntry>>>(
-			EntryApiUrls.getEntries(
-				template,
-				apiQuery.getPagination.getPage,
-				apiQuery.getPagination.getPageSize,
-				apiQuery.getParentId,
-				apiQuery.getLanguage,
-				apiQuery.getIds
-			)
-		);
+		const response = await this.get<PagedList<Entry<TEntry>>>(url);
 
 		return response.data.items;
 	}
 
 	async getEntry<TEntry>(id: string, language?: string): Promise<Entry<TEntry>> {
-		const response = await this.get<Entry<TEntry>>(EntryApiUrls.getEntry(id, language));
+		const url = this.getEntryUrl(id, language);
+
+		const response = await this.get<Entry<TEntry>>(url);
+
 		return response.data;
+	}
+
+	getEntryUrl(id: string, language?: string): string {
+		const action = `${this.action}${id}`;
+		return this.urlFactory().create(action, language ? [new QueryNameValue('language', language)] : []);
+	}
+
+	getEntriesUrl(template: string, query?: QueryEntryBuilder): string {
+		const action = `${this.action}${template}`;
+		return this.urlFactory().create(action, query?.parameters ?? []);
 	}
 }

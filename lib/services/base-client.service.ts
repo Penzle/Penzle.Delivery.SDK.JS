@@ -1,41 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiService, Header, Response } from '@penzle/core-sdk';
+import { UrlFactory } from '../factories/url-factory';
 import { DeliveryConfig, QueryConfig, APIError } from '../models/index';
 
 export abstract class BaseClient {
 	constructor(public readonly config: DeliveryConfig, public readonly httpService: ApiService<any>) {}
 
-	get getDomain(): string {
-		if (!this.config.baseAddress) {
-			throw new Error('Please define baseUrl');
-		}
-
-		if (!this.config.baseAddress.endsWith('/')) {
-			return `${this.config.baseAddress}/`;
-		}
-		return this.config.baseAddress;
+	urlFactory(): UrlFactory {
+		return new UrlFactory(
+			this.config.baseAddress,
+			this.config.project,
+			this.config.environment,
+			this.config.defaultLanguage
+		);
 	}
 
-	get getBaseUrl(): string {
-		const addressTemplate = `${this.getDomain}api/project/${this.config.project ?? 'main'}/environment/${
-			this.config.environment ?? 'main'
-		}/`;
-		return addressTemplate;
-	}
-
-	getApiUrl(relativeUrl: string): string {
-		const baseUrl = this.getBaseUrl;
-		if (relativeUrl) {
-			return `${baseUrl}${relativeUrl}`;
-		}
-		return baseUrl;
-	}
-
-	protected async get<TRawData>(url: string, queryConfig?: QueryConfig): Promise<Response<TRawData>> {
+	protected async get<TRawData>(address: string, queryConfig?: QueryConfig): Promise<Response<TRawData>> {
 		try {
 			return await this.httpService.get<TRawData>(
 				{
-					url: this.getApiUrl(url)
+					url: address
 				},
 				{
 					responseType: 'json',

@@ -1,64 +1,86 @@
-import { QueryAssetBuilder, QueryPaginationBuilder } from '../../../lib';
+import { Page, PageSize, QueryAssetBuilder, QueryNameValue, QueryValue } from '../../../lib';
 
-describe('Query Asset Builder', () => {
-	it('should set the mimeType property when withMimeType is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withMimeType('image/jpeg');
-		expect(builder.getMimeType).toEqual('image/jpeg');
+describe('QueryAssetBuilder', () => {
+	let queryAssetBuilder: QueryAssetBuilder;
+
+	beforeEach(() => {
+		queryAssetBuilder = new QueryAssetBuilder();
 	});
 
-	it('should set the ids property when withIds is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withIds('1,2,3');
-		expect(builder.getIds).toEqual('1,2,3');
+	describe('withMimeType', () => {
+		it('should add mimeType parameter to the parameters array', () => {
+			queryAssetBuilder.withMimeType('image/jpeg');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('mimeType', 'image/jpeg')]);
+		});
 	});
 
-	it('should set the tag property when withTag is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withTag('landscape');
-		expect(builder.getTag).toEqual('landscape');
+	describe('withIds', () => {
+		it('should add ids parameter to the parameters array', () => {
+			queryAssetBuilder.withIds('123,456');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('ids', '123,456')]);
+		});
 	});
 
-	it('should set the keyword property when withKeyword is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withKeyword('ocean');
-		expect(builder.getKeyword).toEqual('ocean');
+	describe('withTag', () => {
+		it('should add tag parameter to the parameters array', () => {
+			queryAssetBuilder.withTag('news');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('tag', 'news')]);
+		});
 	});
 
-	it('should set the parentId property when withParentId is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withParentId('root');
-		expect(builder.getParentId).toEqual('root');
+	describe('withKeyword', () => {
+		it('should add keyword parameter to the parameters array', () => {
+			queryAssetBuilder.withKeyword('sports');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('keyword', 'sports')]);
+		});
 	});
 
-	it('should set the parentId property to the rootId when fromRoot is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.fromRoot('root');
-		expect(builder.getParentId).toEqual('root');
+	describe('withParentId', () => {
+		it('should add parentId parameter to the parameters array', () => {
+			queryAssetBuilder.withParentId('789');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('parentId', '789')]);
+		});
 	});
 
-	it('should set the language property when withLanguage is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withLanguage('en');
-		expect(builder.getLanguage).toEqual('en');
+	describe('fromRoot', () => {
+		it('should add parentId parameter to the parameters array', () => {
+			queryAssetBuilder.fromRoot('123');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('parentId', '123')]);
+		});
 	});
 
-	it('should set the pagination property when withPagination is called', () => {
-		const builder = QueryAssetBuilder.Instance;
-		const pagination = new QueryPaginationBuilder();
-		builder.withPagination(pagination);
-		expect(builder.getPagination).toEqual(pagination);
+	describe('withLanguage', () => {
+		it('should add language parameter to the parameters array', () => {
+			queryAssetBuilder.withLanguage('en');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryNameValue('language', 'en')]);
+		});
 	});
 
-	it('should set the pagination property with default pagination when withPagination is called with no argument', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withPagination(QueryPaginationBuilder.Default);
-		expect(builder.getPagination).toEqual(QueryPaginationBuilder.Default);
+	describe('orderByDescending', () => {
+		it('should add orderBy parameter to the parameters array with direction=desc', () => {
+			queryAssetBuilder.orderByDescending('created');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryValue('orderBy=created&direction=desc')]);
+		});
 	});
 
-	it('should set the tag property to null when withTag is called with a null value', () => {
-		const builder = QueryAssetBuilder.Instance;
-		builder.withTag(null);
-		expect(builder.getTag).toBeNull();
+	describe('orderByAscending', () => {
+		it('should add orderBy parameter to the parameters array with direction=asc', () => {
+			queryAssetBuilder.orderByAscending('updated');
+			expect(queryAssetBuilder.parameters).toEqual([new QueryValue('orderBy=updated&direction=asc')]);
+		});
+	});
+
+	describe('pageSize', () => {
+		it('should add pageSize parameter to the parameters array', () => {
+			queryAssetBuilder.pageSize(10);
+			expect(queryAssetBuilder.parameters).toEqual([new PageSize(10)]);
+		});
+	});
+
+	describe('page', () => {
+		it('should add page parameter to the parameters array', () => {
+			queryAssetBuilder.page(2);
+			expect(queryAssetBuilder.parameters).toEqual([new Page(2)]);
+		});
 	});
 });

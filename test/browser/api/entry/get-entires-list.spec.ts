@@ -1,6 +1,6 @@
 import { getJsonDeliveryClient } from '../../configuration/index';
 import * as responseJson from './get-entires.spec.json';
-import { PagedList } from '../../../../lib';
+import { PagedList, QueryEntryBuilder } from '../../../../lib';
 import { Article } from '../../models/article';
 
 describe('Get entires with pagination', () => {
@@ -30,6 +30,19 @@ describe('Get entires with pagination', () => {
 			expect(item.thumbnail).toEqual(responseJson.items[index].fields.thumbnail);
 			expect(item.thumbnailLandscape).toEqual(responseJson.items[index].fields.thumbnailLandscape);
 			expect(item.title).toEqual(responseJson.items[index].fields.title);
+		});
+	});
+
+	describe('getEntriesUrl', () => {
+		it('should call the get method with the correct url', async () => {
+			const dataTemplate = 'article';
+			const query = new QueryEntryBuilder().pageSize(10).page(1);
+
+			const url = getJsonDeliveryClient(responseJson).entry.getEntriesUrl(dataTemplate, query);
+
+			expect(url).toEqual(
+				'www.penzle.com/api/project/main/environment/main/entries/article?filter[PageSize]=10&filter[page]=0'
+			);
 		});
 	});
 });

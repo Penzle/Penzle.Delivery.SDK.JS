@@ -1,39 +1,100 @@
-import { QueryEntryBuilder, QueryPaginationBuilder } from '../../../lib';
+import {
+	QueryEntryBuilder,
+	WhereEquals,
+	WhereGreaterThan,
+	WhereLessThan,
+	WhereIn,
+	WhereLanguage,
+	SelectFields,
+	OrderBy,
+	PageSize,
+	Page
+} from '../../../lib';
 
 describe('QueryEntryBuilder', () => {
 	let queryEntryBuilder: QueryEntryBuilder;
-	let paginationBuilder: QueryPaginationBuilder;
 
 	beforeEach(() => {
 		queryEntryBuilder = new QueryEntryBuilder();
-		paginationBuilder = new QueryPaginationBuilder();
 	});
 
-	it('should have a default pagination object', () => {
-		expect(queryEntryBuilder.getPagination).toEqual(QueryPaginationBuilder.Default);
+	describe('whereEquals', () => {
+		it('should add a WhereEquals parameter to the parameters array', () => {
+			queryEntryBuilder.whereEquals('fieldName', 'value');
+			expect(queryEntryBuilder.parameters).toEqual([new WhereEquals('fieldName', 'value')]);
+		});
 	});
 
-	it('should set the parent id when withParentId is called', () => {
-		queryEntryBuilder.withParentId('123');
-		expect(queryEntryBuilder.getParentId).toEqual('123');
+	describe('whereGreaterThan', () => {
+		it('should add a WhereGreaterThan parameter to the parameters array', () => {
+			queryEntryBuilder.whereGreaterThan('fieldName', 'value');
+			expect(queryEntryBuilder.parameters).toEqual([new WhereGreaterThan('fieldName', 'value')]);
+		});
 	});
 
-	it('should set the ids when withIds is called', () => {
-		queryEntryBuilder.withIds('abc,def,ghi');
-		expect(queryEntryBuilder.getIds).toEqual('abc,def,ghi');
+	describe('whereLessThan', () => {
+		it('should add a WhereLessThan parameter to the parameters array', () => {
+			queryEntryBuilder.whereLessThan('fieldName', 'value');
+			expect(queryEntryBuilder.parameters).toEqual([new WhereLessThan('fieldName', 'value')]);
+		});
 	});
 
-	it('should set the language when withLanguage is called', () => {
-		queryEntryBuilder.withLanguage('en');
-		expect(queryEntryBuilder.getLanguage).toEqual('en');
+	describe('whereIn', () => {
+		it('should add a WhereIn parameter to the parameters array', () => {
+			queryEntryBuilder.whereIn('fieldName', ['value1', 'value2']);
+			expect(queryEntryBuilder.parameters).toEqual([new WhereIn('fieldName', ['value1', 'value2'])]);
+		});
 	});
 
-	it('should set the pagination when withPagination is called', () => {
-		queryEntryBuilder.withPagination(paginationBuilder);
-		expect(queryEntryBuilder.getPagination).toEqual(paginationBuilder);
+	describe('whereLanguage', () => {
+		it('should add a WhereLanguage parameter to the parameters array', () => {
+			queryEntryBuilder.whereLanguage('language');
+			expect(queryEntryBuilder.parameters).toEqual([new WhereLanguage('language')]);
+		});
 	});
-	it('should set the template when withTemplate is called', () => {
-		queryEntryBuilder.withTemplate('abc');
-		expect(queryEntryBuilder.getTemplate).toEqual('abc');
+
+	describe('selectFields', () => {
+		it('should add a SelectFields parameter to the parameters array', () => {
+			queryEntryBuilder.selectFields(['field1', 'field2']);
+			expect(queryEntryBuilder.parameters).toEqual([new SelectFields(['field1', 'field2'])]);
+		});
+	});
+
+	describe('orderBy', () => {
+		it('should add OrderBy parameter with ascending order', () => {
+			queryEntryBuilder.orderBy('fieldName', 'asc');
+			expect(queryEntryBuilder.parameters).toEqual([new OrderBy('fieldName', 'asc')]);
+		});
+
+		it('should add OrderBy parameter with descending order', () => {
+			queryEntryBuilder.orderBy('fieldName', 'desc');
+			expect(queryEntryBuilder.parameters).toEqual([new OrderBy('fieldName', 'desc')]);
+		});
+
+		it('should throw an error if field is null or empty', () => {
+			expect(() => queryEntryBuilder.orderBy('', 'asc')).toThrowError(
+				`Field specified in 'Order' can't be null or empty`
+			);
+		});
+	});
+
+	describe('PageSize', () => {
+		it('should add a PageSize parameter to the parameters array', () => {
+			queryEntryBuilder.pageSize(10);
+			expect(queryEntryBuilder.parameters).toEqual([new PageSize(10)]);
+		});
+
+		it('should throw an error if page size is less than 0', () => {
+			expect(() => queryEntryBuilder.pageSize(-1)).toThrowError(
+				`'PageSize' must be a positive integer number or zero.`
+			);
+		});
+	});
+
+	describe('page', () => {
+		it('should add a Page parameter to the parameters array', () => {
+			queryEntryBuilder.page(2);
+			expect(queryEntryBuilder.parameters).toEqual([new Page(2)]);
+		});
 	});
 });

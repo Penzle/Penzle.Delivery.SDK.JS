@@ -1,69 +1,84 @@
-// This is a class that creates a query entry builder
-import { QueryPaginationBuilder } from './query-pagination-builder';
+import { QueryParameter } from '@penzle/core-sdk';
+import { WhereLanguage } from '../filters/where-language';
+import { PageSize } from '../filters/page-size';
+import {
+	Query,
+	WhereEquals,
+	WhereGreaterThan,
+	WhereLessThan,
+	WhereIn,
+	SelectFields,
+	QueryValue,
+	SortOrder,
+	OrderBy,
+	Page
+} from '../filters';
 
 export class QueryEntryBuilder {
-	constructor() {
-		this.pagination = QueryPaginationBuilder.Default;
-	}
+	parameters: QueryParameter[] = [];
 
-	static instance = new QueryEntryBuilder();
-
-	private ids?: string;
-
-	private pagination: QueryPaginationBuilder;
-
-	private parentId?: string;
-
-	private language?: string;
-
-	private template?: string;
-
-	// Method to set the parent id
-	withParentId(parentId: string): QueryEntryBuilder {
-		this.parentId = parentId;
+	whereEquals(field: string, value: string): QueryEntryBuilder {
+		this.parameters.push(new WhereEquals(field, value));
 		return this;
 	}
 
-	// Method to set the ids
-	withIds(ids: string): QueryEntryBuilder {
-		this.ids = ids;
+	whereGreaterThan(field: string, value: string): QueryEntryBuilder {
+		this.parameters.push(new WhereGreaterThan(field, value));
 		return this;
 	}
 
-	// Method to set the language
-	withLanguage(language: string): QueryEntryBuilder {
-		this.language = language;
+	whereLessThan(field: string, value: string): QueryEntryBuilder {
+		this.parameters.push(new WhereLessThan(field, value));
 		return this;
 	}
 
-	// Method to set the pagination
-	withPagination(pagination: QueryPaginationBuilder | undefined): QueryEntryBuilder {
-		this.pagination = pagination || QueryPaginationBuilder.Default;
+	whereIn(field: string, values: string[]): QueryEntryBuilder {
+		this.parameters.push(new WhereIn(field, values));
 		return this;
 	}
 
-	withTemplate(template: string): QueryEntryBuilder {
-		this.template = template;
+	whereLanguage(language: string): QueryEntryBuilder {
+		this.parameters.push(new WhereLanguage(language));
 		return this;
 	}
 
-	get getIds(): string | undefined {
-		return this.ids;
+	selectFields(select: string[]): QueryEntryBuilder {
+		this.parameters.push(new SelectFields(select));
+		return this;
 	}
 
-	get getPagination(): QueryPaginationBuilder {
-		return this.pagination;
+	orderBy(fieldName: string, sortOrder: SortOrder): this {
+		this.parameters.push(new OrderBy(fieldName, sortOrder));
+		return this;
 	}
 
-	get getLanguage(): string | undefined {
-		return this.language;
+	orderByDescending(fieldName: string): this {
+		this.parameters.push(new OrderBy(fieldName, 'desc'));
+		return this;
 	}
 
-	get getParentId(): string | undefined {
-		return this.parentId;
+	orderByAscending(fieldName: string): this {
+		this.parameters.push(new OrderBy(fieldName, 'asc'));
+		return this;
 	}
 
-	get getTemplate(): string | undefined {
-		return this.template;
+	pageSize(size: number): this {
+		this.parameters.push(new PageSize(size));
+		return this;
+	}
+
+	page(page: number): this {
+		this.parameters.push(new Page(page));
+		return this;
+	}
+
+	and(queryParam: Query): QueryEntryBuilder {
+		this.parameters.push(new QueryValue(queryParam.getParameter()));
+		return this;
+	}
+
+	or(queryParam: Query): QueryEntryBuilder {
+		this.parameters.push(new QueryValue(queryParam.getOrParameter()));
+		return this;
 	}
 }

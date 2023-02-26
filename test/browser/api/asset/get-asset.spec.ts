@@ -27,4 +27,23 @@ describe('Get single asset', () => {
 		expect(response.assetMimeType).toEqual(responseJson.assetMimeType);
 		expect(response.tags).toEqual(responseJson.tags);
 	});
+
+	describe('getAssetUrl', () => {
+		it('should call the get getAssetUrl method with the correct url', async () => {
+			const id = 'my-id';
+
+			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrl(id);
+
+			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/assets/my-id');
+		});
+
+		it('should call the getAssetUrl method with id and language with the correct url', async () => {
+			const id = 'my-id';
+			const language = 'en-US';
+
+			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrl(id, language);
+
+			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/assets/my-id?language=en-US');
+		});
+	});
 });

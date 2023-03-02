@@ -1,4 +1,4 @@
-# Penzle Delivery JavaScript SDK 
+# Penzle Delivery JavaScript SDK  
 
 A JavaScript SDK for interacting with the Penzle Content Delivery API.
 

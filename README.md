@@ -1,6 +1,6 @@
 # Penzle Delivery JavaScript SDK  
 
-A JavaScript SDK for interacting with the Penzle Content Delivery API.
+A JavaScript SDK for interacting with the Penzle Content Delivery API. 
 
 ## Installation
 

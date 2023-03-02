@@ -4,7 +4,7 @@ A JavaScript SDK for interacting with the Penzle Content Delivery API.
 
 ## Installation
 
-### npm
+### npm 
 
 ```
 npm i @penzle/delivery-sdk --save

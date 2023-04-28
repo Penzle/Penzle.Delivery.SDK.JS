@@ -1,5 +1,6 @@
 import { QueryParameter } from '@penzle/core-sdk';
 import {
+	Include,
 	OrderBy,
 	Page,
 	PageSize,
@@ -161,6 +162,11 @@ describe('UrlFactory', () => {
 		it('should return correct URL with Page parameter', () => {
 			const url = urlFactory.create('posts', [new Page(3)]);
 			expect(url).toBe('https://base-url.com/api/project/main/environment/main/posts?filter[page]=2');
+		});
+
+		it('should return correct URL with Include parameter', () => {
+			const url = urlFactory.create('posts', [new Include(3)]);
+			expect(url).toBe('https://base-url.com/api/project/main/environment/main/posts?include=3');
 		});
 
 		it('should return correct URL with PageSize parameter', () => {

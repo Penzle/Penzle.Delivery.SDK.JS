@@ -11,7 +11,8 @@ import {
 	QueryValue,
 	SortOrder,
 	OrderBy,
-	Page
+	Page,
+	Include
 } from '../filters';
 
 export class QueryEntryBuilder {
@@ -64,6 +65,11 @@ export class QueryEntryBuilder {
 
 	pageSize(size: number): this {
 		this.parameters.push(new PageSize(size));
+		return this;
+	}
+
+	include(include: number): this {
+		this.parameters.push(new Include(include));
 		return this;
 	}
 

@@ -8,7 +8,8 @@ import {
 	SelectFields,
 	OrderBy,
 	PageSize,
-	Page
+	Page,
+	Include
 } from '../../../lib';
 
 describe('QueryEntryBuilder', () => {
@@ -95,6 +96,13 @@ describe('QueryEntryBuilder', () => {
 		it('should add a Page parameter to the parameters array', () => {
 			queryEntryBuilder.page(2);
 			expect(queryEntryBuilder.parameters).toEqual([new Page(2)]);
+		});
+	});
+
+	describe('include', () => {
+		it('should add a Include parameter to the parameters array', () => {
+			queryEntryBuilder.include(2);
+			expect(queryEntryBuilder.parameters).toEqual([new Include(2)]);
 		});
 	});
 });

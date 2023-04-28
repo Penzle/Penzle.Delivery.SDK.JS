@@ -27,3 +27,4 @@ export * from './filters/order-by';
 export * from './filters/where-language';
 export * from './filters/page';
 export * from './filters/page-size';
+export * from './filters/include';

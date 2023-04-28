@@ -8,3 +8,4 @@ export * from './query-value';
 export * from './sort-order';
 export * from './order-by';
 export * from './page';
+export * from './include';

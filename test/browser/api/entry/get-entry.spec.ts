@@ -38,5 +38,17 @@ describe('Get entry', () => {
 
 			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US');
 		});
+
+		it('should call the getEntryUrl method with id, language and include with the correct url', async () => {
+			const id = 'my-id';
+			const language = 'en-US';
+			const include = 3;
+
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id, language, include);
+
+			expect(url).toEqual(
+				'www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US&include=3'
+			);
+		});
 	});
 });

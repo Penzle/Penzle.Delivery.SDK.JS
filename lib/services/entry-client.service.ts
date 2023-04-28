@@ -84,9 +84,13 @@ export class EntryClient extends BaseClient {
 		return response.data;
 	}
 
-	getEntryUrl(id: string, language?: string): string {
+	getEntryUrl(id: string, language?: string, include?: number): string {
 		const action = `${this.action}${id}`;
-		return this.urlFactory().create(action, language ? [new QueryNameValue('language', language)] : []);
+		const query = [];
+		if (language) query.push(new QueryNameValue('language', language));
+		if (include) query.push(new QueryNameValue('include', include.toFixed()));
+
+		return this.urlFactory().create(action, query);
 	}
 
 	getEntriesUrl(template: string, query?: QueryEntryBuilder): string {

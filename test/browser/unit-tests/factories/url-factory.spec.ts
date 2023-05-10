@@ -11,7 +11,8 @@ import {
 	WhereGreaterThan,
 	WhereIn,
 	WhereLanguage,
-	WhereLessThan
+	WhereLessThan,
+	UsePreviewMode
 } from '../../../../lib';
 
 describe('UrlFactory', () => {
@@ -31,9 +32,9 @@ describe('UrlFactory', () => {
 			expect(urlFactory.getHost).toBe('https://base-url.com/');
 		});
 
-		it('should throw an error if the host property is not defined', () => {
-			urlFactory = new UrlFactory(undefined);
-			expect(() => urlFactory.getHost).toThrowError('Please define baseUrl');
+		it('should set default host if the host property is not defined', () => {
+			urlFactory = new UrlFactory();
+			expect(urlFactory.getHost).toBe('https://api.penzle.com/');
 		});
 	});
 
@@ -79,6 +80,23 @@ describe('UrlFactory', () => {
 		it('should not add default language when none specified globally', () => {
 			const parameters: QueryParameter[] = [];
 			urlFactory.addDefaultLanguage(parameters);
+			expect(parameters.length).toEqual(0);
+		});
+	});
+
+	describe('usePreviewMode', () => {
+		it('should add preview mode when none specified and preview mode specified globally', () => {
+			urlFactory.usePreviewMode = true;
+			const parameters: QueryParameter[] = [];
+			urlFactory.addPreviewMode(parameters);
+			expect(parameters.length).toEqual(1);
+			expect(parameters[0]).toBeInstanceOf(UsePreviewMode);
+			expect((parameters[0] as UsePreviewMode).getParameter()).toEqual('preview=true');
+		});
+
+		it('should not add preview mode when none specified globally', () => {
+			const parameters: QueryParameter[] = [];
+			urlFactory.addPreviewMode(parameters);
 			expect(parameters.length).toEqual(0);
 		});
 	});
@@ -190,6 +208,19 @@ describe('UrlFactory', () => {
 			]);
 			expect(url).toBe(
 				'https://base-url.com/api/project/main/environment/main/posts?filter[where][and][system.language]=en&filter[page]=2&filter[PageSize]=5&filter[order]=fieldName desc'
+			);
+		});
+
+		it('should return correct URL with multiple parameters and preview', () => {
+			const url = urlFactory.create('posts', [
+				new WhereLanguage('en'),
+				new Page(3),
+				new PageSize(5),
+				new OrderBy('fieldName', 'desc'),
+				new UsePreviewMode()
+			]);
+			expect(url).toBe(
+				'https://base-url.com/api/project/main/environment/main/posts?filter[where][and][system.language]=en&filter[page]=2&filter[PageSize]=5&filter[order]=fieldName desc&preview=true'
 			);
 		});
 

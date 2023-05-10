@@ -2,23 +2,21 @@
 <html>
 
 <head>
-	<title>Penzle.com SDK - UMD sample</title> 
+	<title>Penzle Delivery JavaScript SDK</title> 
 	<script type="text/javascript" src="../dist/bundles/penzle-delivery.min.js"></script>
 </head>
 
 <body>
-
 	<script type="text/javascript">
-		var penzleDelivery = window['penzleDelivery'];
+		 var PenzleDelivery = window['penzleDelivery'];
 
-		var deliveryClient = new penzleDelivery.createDeliveryClient({
-			baseAddress: 'https://www.penzle.com/api/',
-			accessApiToken: '5ab3464be2ccb9dabe9'
+		var deliveryClient = PenzleDelivery.createDeliveryClient({
+			accessApiToken: '<YOUR_API_ACCESS_TOKEN>'
 		});
 
-		deliveryClient.entry
-			.getEntry('3fa85f64-5717-4562-b3fc-2c963f66afa6')
-			.then(response => console.log(response));
+		deliveryClient.entry.getEntries('<DATA_TEMPLATE_CODENAME>')
+			.then(response => console.log(response))
+			.catch(console.error);
 
 	</script>
 

@@ -6,12 +6,13 @@ import { DeliveryConfig, QueryConfig, APIError } from '../models/index';
 export abstract class BaseClient {
 	constructor(public readonly config: DeliveryConfig, public readonly httpService: ApiService<any>) {}
 
-	urlFactory(): UrlFactory {
+	protected urlFactory(): UrlFactory {
 		return new UrlFactory(
 			this.config.baseAddress,
 			this.config.project,
 			this.config.environment,
-			this.config.defaultLanguage
+			this.config.defaultLanguage,
+			this.config.usePreviewMode
 		);
 	}
 
@@ -33,7 +34,7 @@ export abstract class BaseClient {
 		}
 	}
 
-	handleAPIError(error: any): APIError {
+	protected handleAPIError(error: any): APIError {
 		if (error.response) {
 			// The request was made and the server responded with a status code
 			// that falls out of the range of 2xx
@@ -60,7 +61,7 @@ export abstract class BaseClient {
 		};
 	}
 
-	getHeaders(customHeaders?: Header[]): Header[] {
+	private getHeaders(customHeaders?: Header[]): Header[] {
 		const headers: Header[] = [];
 
 		if (customHeaders) {

@@ -1,10 +1,13 @@
 import { QueryParameter } from '@penzle/core-sdk';
-import { Page, QueryValue } from '../filters';
+import { Page, QueryValue, UsePreviewMode } from '../filters';
 import { PageSize } from '../filters/page-size';
 import { QueryNameValue } from '../filters/query-name-value';
+import { QueryConfig } from '../common/query-config';
 
 export class QueryAssetBuilder {
 	parameters: QueryParameter[] = [];
+
+	queryConfig: QueryConfig | undefined;
 
 	withMimeType(mimeType: string): this {
 		this.parameters.push(new QueryNameValue('mimeType', mimeType));
@@ -41,6 +44,11 @@ export class QueryAssetBuilder {
 		return this;
 	}
 
+	usePreviewMode(): this {
+		this.parameters.push(new UsePreviewMode());
+		return this;
+	}
+
 	orderByDescending(fieldName: string): this {
 		this.parameters.push(new QueryValue(`orderBy=${fieldName}&direction=desc`));
 		return this;
@@ -53,6 +61,11 @@ export class QueryAssetBuilder {
 
 	pageSize(size: number): this {
 		this.parameters.push(new PageSize(size));
+		return this;
+	}
+
+	withQueryConfig(queryConfig: QueryConfig): this {
+		this.queryConfig = queryConfig;
 		return this;
 	}
 

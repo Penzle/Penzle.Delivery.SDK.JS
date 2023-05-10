@@ -8,6 +8,6 @@ export abstract class BaseQuery {
 			return this.defaultValue;
 		}
 
-		return this.value;
+		return encodeURIComponent(this.value);
 	}
 }

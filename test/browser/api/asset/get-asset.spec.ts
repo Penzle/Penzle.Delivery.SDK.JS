@@ -28,11 +28,11 @@ describe('Get single asset', () => {
 		expect(response.tags).toEqual(responseJson.tags);
 	});
 
-	describe('getAssetUrl', () => {
+	describe('getAssetUrlQuery', () => {
 		it('should call the get getAssetUrl method with the correct url', async () => {
 			const id = 'my-id';
 
-			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrl(id);
+			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrlQuery(id);
 
 			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/assets/my-id');
 		});
@@ -41,9 +41,21 @@ describe('Get single asset', () => {
 			const id = 'my-id';
 			const language = 'en-US';
 
-			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrl(id, language);
+			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrlQuery(id, { language });
 
 			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/assets/my-id?language=en-US');
+		});
+
+		it('should call the getAssetUrl method with id, language and preview mode with the correct url', async () => {
+			const id = 'my-id';
+			const language = 'en-US';
+			const usePreviewMode = true;
+
+			const url = getJsonDeliveryClient(responseJson).asset.getAssetUrlQuery(id, { language, usePreviewMode });
+
+			expect(url).toEqual(
+				'www.penzle.com/api/project/main/environment/main/assets/my-id?language=en-US&preview=true'
+			);
 		});
 	});
 });

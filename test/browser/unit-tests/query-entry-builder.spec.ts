@@ -21,35 +21,35 @@ describe('QueryEntryBuilder', () => {
 
 	describe('whereEquals', () => {
 		it('should add a WhereEquals parameter to the parameters array', () => {
-			queryEntryBuilder.whereEquals('fieldName', 'value');
+			queryEntryBuilder.equals('fieldName', 'value');
 			expect(queryEntryBuilder.parameters).toEqual([new WhereEquals('fieldName', 'value')]);
 		});
 	});
 
 	describe('whereGreaterThan', () => {
 		it('should add a WhereGreaterThan parameter to the parameters array', () => {
-			queryEntryBuilder.whereGreaterThan('fieldName', 'value');
+			queryEntryBuilder.greaterThan('fieldName', 'value');
 			expect(queryEntryBuilder.parameters).toEqual([new WhereGreaterThan('fieldName', 'value')]);
 		});
 	});
 
 	describe('whereLessThan', () => {
 		it('should add a WhereLessThan parameter to the parameters array', () => {
-			queryEntryBuilder.whereLessThan('fieldName', 'value');
+			queryEntryBuilder.lessThan('fieldName', 'value');
 			expect(queryEntryBuilder.parameters).toEqual([new WhereLessThan('fieldName', 'value')]);
 		});
 	});
 
 	describe('whereIn', () => {
 		it('should add a WhereIn parameter to the parameters array', () => {
-			queryEntryBuilder.whereIn('fieldName', ['value1', 'value2']);
+			queryEntryBuilder.in('fieldName', ['value1', 'value2']);
 			expect(queryEntryBuilder.parameters).toEqual([new WhereIn('fieldName', ['value1', 'value2'])]);
 		});
 	});
 
 	describe('whereLanguage', () => {
 		it('should add a WhereLanguage parameter to the parameters array', () => {
-			queryEntryBuilder.whereLanguage('language');
+			queryEntryBuilder.withLanguage('language');
 			expect(queryEntryBuilder.parameters).toEqual([new WhereLanguage('language')]);
 		});
 	});

@@ -8,6 +8,6 @@ export class QueryNameValue implements QueryParameter {
 	}
 
 	getParameter(): string {
-		return `${this.name}=${this.value}`;
+		return `${this.name}=${encodeURIComponent(this.value)}`;
 	}
 }

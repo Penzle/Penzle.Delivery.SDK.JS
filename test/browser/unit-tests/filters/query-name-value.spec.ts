@@ -12,8 +12,8 @@ describe('QueryNameValue', () => {
 		expect(queryNameValue.getParameter()).toBe('name=value');
 	});
 
-	it('should return the parameter string with name and value that includes special characters', () => {
+	it('should return the parameter string with name and value that includes encode special characters', () => {
 		const queryNameValue = new QueryNameValue('name', 'value=test');
-		expect(queryNameValue.getParameter()).toBe('name=value=test');
+		expect(queryNameValue.getParameter()).toBe('name=value%3Dtest');
 	});
 });

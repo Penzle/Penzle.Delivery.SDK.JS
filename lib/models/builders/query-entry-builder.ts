@@ -12,33 +12,37 @@ import {
 	SortOrder,
 	OrderBy,
 	Page,
-	Include
+	Include,
+	UsePreviewMode
 } from '../filters';
+import { QueryConfig } from '../common/query-config';
 
 export class QueryEntryBuilder {
 	parameters: QueryParameter[] = [];
 
-	whereEquals(field: string, value: string): QueryEntryBuilder {
+	queryConfig: QueryConfig | undefined;
+
+	equals(field: string, value: string): QueryEntryBuilder {
 		this.parameters.push(new WhereEquals(field, value));
 		return this;
 	}
 
-	whereGreaterThan(field: string, value: string): QueryEntryBuilder {
+	greaterThan(field: string, value: string): QueryEntryBuilder {
 		this.parameters.push(new WhereGreaterThan(field, value));
 		return this;
 	}
 
-	whereLessThan(field: string, value: string): QueryEntryBuilder {
+	lessThan(field: string, value: string): QueryEntryBuilder {
 		this.parameters.push(new WhereLessThan(field, value));
 		return this;
 	}
 
-	whereIn(field: string, values: string[]): QueryEntryBuilder {
+	in(field: string, values: string[]): QueryEntryBuilder {
 		this.parameters.push(new WhereIn(field, values));
 		return this;
 	}
 
-	whereLanguage(language: string): QueryEntryBuilder {
+	withLanguage(language: string): QueryEntryBuilder {
 		this.parameters.push(new WhereLanguage(language));
 		return this;
 	}
@@ -65,6 +69,16 @@ export class QueryEntryBuilder {
 
 	pageSize(size: number): this {
 		this.parameters.push(new PageSize(size));
+		return this;
+	}
+
+	usePreviewMode(): this {
+		this.parameters.push(new UsePreviewMode());
+		return this;
+	}
+
+	withQueryConfig(queryConfig: QueryConfig): this {
+		this.queryConfig = queryConfig;
 		return this;
 	}
 

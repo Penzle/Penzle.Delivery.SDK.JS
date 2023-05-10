@@ -24,8 +24,9 @@ describe('Get entry', () => {
 	describe('getEntryUrl', () => {
 		it('should call the get getEntryUrl method with the correct url', async () => {
 			const id = 'my-id';
+			const action = `entries/${id}`;
 
-			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id);
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrlQuery(action, {});
 
 			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/entries/my-id');
 		});
@@ -33,8 +34,9 @@ describe('Get entry', () => {
 		it('should call the getEntryUrl method with id and language with the correct url', async () => {
 			const id = 'my-id';
 			const language = 'en-US';
+			const action = `entries/${id}`;
 
-			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id, language);
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrlQuery(action, { language });
 
 			expect(url).toEqual('www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US');
 		});
@@ -43,11 +45,32 @@ describe('Get entry', () => {
 			const id = 'my-id';
 			const language = 'en-US';
 			const include = 3;
-
-			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrl(id, language, include);
+			const action = `entries/${id}`;
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrlQuery(action, {
+				language,
+				include
+			});
 
 			expect(url).toEqual(
 				'www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US&include=3'
+			);
+		});
+
+		it('should call the getEntryUrl method with id, language, include and preview with the correct url', async () => {
+			const id = 'my-id';
+			const language = 'en-US';
+			const include = 3;
+			const action = `entries/${id}`;
+			const usePreviewMode = true;
+
+			const url = getJsonDeliveryClient(responseJson).entry.getEntryUrlQuery(action, {
+				language,
+				include,
+				usePreviewMode
+			});
+
+			expect(url).toEqual(
+				'www.penzle.com/api/project/main/environment/main/entries/my-id?language=en-US&include=3&preview=true'
 			);
 		});
 	});
